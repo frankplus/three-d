@@ -228,6 +228,16 @@ impl Program
         self.gl.unuse_program();
     }
 
+    pub fn draw_arrays_line_strip(&self, count: u32)
+    {
+        self.set_used();
+        self.gl.draw_arrays(consts::LINE_STRIP, 0, count);
+        for location in self.vertex_attributes.values() {
+            self.gl.disable_vertex_attrib_array(*location);
+        }
+        self.gl.unuse_program();
+    }
+
     pub fn draw_arrays_instanced(&self, count: u32, instance_count: u32)
     {
         self.set_used();
