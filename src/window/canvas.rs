@@ -67,8 +67,8 @@ impl Window
         self.add_mousemove_event_listener(events.clone())?;
         self.add_touchmove_event_listener(events.clone(), last_position.clone(), last_zoom.clone())?;
         self.add_mousewheel_event_listener(events.clone())?;
-        self.add_key_down_event_listener(events.clone())?;
-        self.add_key_up_event_listener(events.clone())?;
+        // self.add_key_down_event_listener(events.clone())?;
+        // self.add_key_up_event_listener(events.clone())?;
 
         *g.borrow_mut() = Some(Closure::wrap(Box::new(move || {
             let now = performance.now();
@@ -225,31 +225,31 @@ impl Window
         Ok(())
     }
 
-    fn add_key_down_event_listener(&self, events: Rc<RefCell<Vec<Event>>>) -> Result<(), Error>
-    {
-        let closure = Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-            if !event.default_prevented() {
-                (*events).borrow_mut().push(Event::Key {state: State::Pressed, kind: map_key_code(event.code())});
-                event.prevent_default();
-            }
-        }) as Box<dyn FnMut(_)>);
-        window().add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref()).map_err(|e| Error::EventListenerError {message: format!("Unable to add key down event listener. Error code: {:?}", e)})?;
-        closure.forget();
-        Ok(())
-    }
+    // fn add_key_down_event_listener(&self, events: Rc<RefCell<Vec<Event>>>) -> Result<(), Error>
+    // {
+    //     let closure = Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+    //         if !event.default_prevented() {
+    //             (*events).borrow_mut().push(Event::Key {state: State::Pressed, kind: map_key_code(event.code())});
+    //             event.prevent_default();
+    //         }
+    //     }) as Box<dyn FnMut(_)>);
+    //     window().add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref()).map_err(|e| Error::EventListenerError {message: format!("Unable to add key down event listener. Error code: {:?}", e)})?;
+    //     closure.forget();
+    //     Ok(())
+    // }
 
-    fn add_key_up_event_listener(&self, events: Rc<RefCell<Vec<Event>>>) -> Result<(), Error>
-    {
-        let closure = Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-            if !event.default_prevented() {
-                (*events).borrow_mut().push(Event::Key {state: State::Released, kind: map_key_code(event.code())});
-                event.prevent_default();
-            }
-        }) as Box<dyn FnMut(_)>);
-        window().add_event_listener_with_callback("keyup", closure.as_ref().unchecked_ref()).map_err(|e| Error::EventListenerError {message: format!("Unable to add key up event listener. Error code: {:?}", e)})?;
-        closure.forget();
-        Ok(())
-    }
+    // fn add_key_up_event_listener(&self, events: Rc<RefCell<Vec<Event>>>) -> Result<(), Error>
+    // {
+    //     let closure = Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+    //         if !event.default_prevented() {
+    //             (*events).borrow_mut().push(Event::Key {state: State::Released, kind: map_key_code(event.code())});
+    //             event.prevent_default();
+    //         }
+    //     }) as Box<dyn FnMut(_)>);
+    //     window().add_event_listener_with_callback("keyup", closure.as_ref().unchecked_ref()).map_err(|e| Error::EventListenerError {message: format!("Unable to add key up event listener. Error code: {:?}", e)})?;
+    //     closure.forget();
+    //     Ok(())
+    // }
 
     pub fn size(&self) -> (usize, usize)
     {
@@ -267,10 +267,10 @@ impl Window
     }
 }
 
-fn map_key_code(code: String) -> String
-{
-    code.trim_start_matches("Key").to_string()
-}
+// fn map_key_code(code: String) -> String
+// {
+//     code.trim_start_matches("Key").to_string()
+// }
 
 fn window() -> web_sys::Window {
     web_sys::window().expect("no global `window` exists")
